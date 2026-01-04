@@ -1,0 +1,18 @@
+
+import mongoose, { Schema, Model, models } from 'mongoose';
+import { Candidate } from '@/types';
+
+const candidateSchema = new Schema<Candidate>(
+    {
+        name: { type: String, required: true },
+        address: { type: String, required: true },
+        party: { type: String, required: true },
+        contactNumber: { type: String, required: true },
+        districtId: { type: String, required: true, index: true },
+    },
+    {
+        timestamps: true,
+    }
+);
+
+export const CandidateModel: Model<Candidate> = models.Candidate || mongoose.model<Candidate>('Candidate', candidateSchema);
