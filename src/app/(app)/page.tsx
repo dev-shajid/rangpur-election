@@ -14,7 +14,7 @@ const Index = () => {
           <div className="max-w-3xl mx-auto text-center animate-fade-in">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary mb-6">
               <Vote className="h-4 w-4" />
-              <span>National Election 2024</span>
+              <span>National Election 2026</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
@@ -102,7 +102,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © 2024 Rangpur Division Election Commission. All rights reserved.
+              © 2026 Rangpur Division Election Commission. All rights reserved.
             </p>
             <p className="text-sm text-muted-foreground">
               For official use only. Data accuracy is admin responsibility.

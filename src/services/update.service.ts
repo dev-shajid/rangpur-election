@@ -1,7 +1,6 @@
 'use server'
 
 import dbConnect from "@/lib/db";
-import { wait } from "@/lib/wait";
 import { UpdateModel } from "@/models/Update";
 import { Update } from "@/types";
 import { checkAdmin } from "./auth.service";
@@ -11,7 +10,7 @@ export async function getUpdatesByDistrict(districtId: string): Promise<Update[]
     try {
         await dbConnect();
         // Sort by time descending (newest first)
-        // Note: 'time' is stored as string in current mock data (e.g. "2024-01-15T14:30:00Z"), 
+        // Note: 'time' is stored as string in current mock data (e.g. "2026-01-15T14:30:00Z"), 
         // so standard string sort works for ISO dates, but complex strings might need special handling.
         // Assuming ISO format from seed.
         const updates = await UpdateModel.find({ districtId }).lean();
