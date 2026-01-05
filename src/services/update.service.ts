@@ -32,7 +32,6 @@ export async function getUpdatesByDistrict(districtId: string): Promise<Update[]
 export async function getCriticalUpdatesCountByDistrict(districtId: string): Promise<number> {
     try {
         await dbConnect();
-        await wait(3000);
         const updateCount = await UpdateModel.countDocuments({ districtId, category: "critical" });
         return updateCount;
     } catch (error) {
