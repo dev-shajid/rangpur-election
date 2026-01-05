@@ -4,7 +4,6 @@ import { Update } from '@/types';
 
 const updateSchema = new Schema<Update>(
     {
-        time: { type: String, required: true }, // Keeping as string to match current usage, but Date would be better
         location: { type: String, required: true },
         incident: { type: String, required: true },
         category: {

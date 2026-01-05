@@ -14,9 +14,6 @@ import { createUpdate, updateUpdate } from "@/services/update.service"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const formSchema = z.object({
-    time: z.string().min(1, {
-        message: "Time is required.",
-    }),
     location: z.string().min(3, {
         message: "Location must be at least 3 characters.",
     }),
@@ -45,7 +42,6 @@ export function UpdateDialog({ open, onOpenChange, update, districtId, onSuccess
 
     const form = useForm<FormValues>({
         defaultValues: {
-            time: new Date().toISOString().slice(0, 16),
             location: "",
             incident: "",
             category: "normal",
@@ -58,7 +54,6 @@ export function UpdateDialog({ open, onOpenChange, update, districtId, onSuccess
     useEffect(() => {
         if (open) {
             form.reset({
-                time: update?.time || new Date().toISOString().slice(0, 16),
                 location: update?.location || "",
                 incident: update?.incident || "",
                 category: update?.category || "normal",
@@ -97,23 +92,6 @@ export function UpdateDialog({ open, onOpenChange, update, districtId, onSuccess
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="time"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Time</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="datetime-local"
-                                            disabled={isPending}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
                         <FormField
                             control={form.control}
                             name="location"

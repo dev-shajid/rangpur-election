@@ -25,13 +25,14 @@ export type IncidentCategory = "normal" | "less-critical" | "critical";
 export interface Update {
   id?: string;
   _id?: string;
-  time: string;
   location: string;
   incident: string;
   category: IncidentCategory;
   requirements?: string;
   action: string;
   districtId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type Role = "superadmin" | DistrictName

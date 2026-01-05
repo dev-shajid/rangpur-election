@@ -1,6 +1,5 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { z } from "zod"
 import { compare } from "bcryptjs"
 import dbConnect from "@/lib/db"
 import { UserModel } from "@/models/User"
@@ -15,34 +14,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: { label: "Password", type: "password" },
             },
             authorize: async (credentials) => {
-                const parsedCredentials = z
-                    .object({ email: z.email(), password: z.string().min(6) })
-                    .safeParse(credentials)
-
-                if (parsedCredentials.success) {
-                    const { email, password } = parsedCredentials.data
-
-                    await dbConnect();
-                    const user = await UserModel.findOne({ email, role: {$exists: true } }).select("+password");
-
-                    if (!user || !user.password) return null;
-
-                    const passwordsMatch = await compare(password, user.password);
-
-                    if (passwordsMatch) {
-                        if (!user.role) {
-                            throw new Error("AccessDenied");
-                        }
-
-                        return {
-                            id: user._id.toString(),
-                            name: user.name,
-                            email: user.email,
-                            role: user.role,
-                        } as User;
-                    }
+                if (!credentials?.email || !credentials?.password) {
+                    return null;
                 }
 
+                await dbConnect();
+                const user = await UserModel.findOne({ email: credentials.email, role: { $exists: true } }).select("+password")
+
+                if (!user || !user.password) return null;
+
+                const passwordsMatch = await compare(String(credentials?.password), user.password);
+                if (passwordsMatch) {
+                    if (!user.role) {
+                        throw new Error("AccessDenied");
+                    }
+
+                    return {
+                        id: user._id.toString(),
+                        name: user.name,
+                        email: user.email,
+                        role: user.role as Role,
+                    };
+                }
+
+                // Add explicit return for when passwords don't match
                 return null;
             },
         }),

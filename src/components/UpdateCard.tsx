@@ -36,7 +36,7 @@ const UpdateCard = ({ update }: UpdateCardProps) => {
     const config = getCategoryConfig(update.category);
     const IconComponent = config.icon;
 
-    const formattedTime = new Date(update.time).toLocaleString("en-BD", {
+    const formattedTime = new Date(update.updatedAt || 0).toLocaleString("en-BD", {
         dateStyle: "medium",
         timeStyle: "short",
     });

@@ -8,12 +8,12 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { signIn } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react"
 import { toast } from "sonner"
 
 const formSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.email("Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 })
 
@@ -22,7 +22,6 @@ export default function SignInForm() {
   const [redirecting, setRedirecting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,7 +54,7 @@ export default function SignInForm() {
         toast.success("Sign In Successful!", {
           description: "You are being redirected to your profile.",
         })
-        const callbackUrl = searchParams.get("callbackUrl") || "/"
+        const callbackUrl = "/"
         router.push(callbackUrl)
       } else {
         throw new Error("An unexpected error occurred. Please try again or contact support.")

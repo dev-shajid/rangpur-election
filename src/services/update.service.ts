@@ -14,7 +14,6 @@ export async function getUpdatesByDistrict(districtId: string): Promise<Update[]
         // Note: 'time' is stored as string in current mock data (e.g. "2024-01-15T14:30:00Z"), 
         // so standard string sort works for ISO dates, but complex strings might need special handling.
         // Assuming ISO format from seed.
-        await wait(3000);
         const updates = await UpdateModel.find({ districtId }).lean();
         return updates
             .map(u => ({
@@ -22,7 +21,7 @@ export async function getUpdatesByDistrict(districtId: string): Promise<Update[]
                 id: (u._id as any).toString(),
                 _id: (u._id as any).toString()
             }))
-            .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()) as unknown as Update[];
+            .sort((a, b) => new Date(b?.updatedAt || 0).getTime() - new Date(a?.updatedAt || 0).getTime()) as unknown as Update[];
 
     } catch (error) {
         console.error("Error fetching updates:", error);
