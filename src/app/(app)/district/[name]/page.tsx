@@ -22,7 +22,7 @@ export default async function DistrictDashboard({ params }: { params: Promise<{ 
     return (
         <>
             {/* District Header */}
-            <section className="border-b border-border bg-gradient-to-b from-muted/50 to-background">
+            <section className="border-b border-border bg-linear-to-b from-muted/50 to-background">
                 <div className="container mx-auto px-4 py-10">
                     <Link href="/">
                         <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-muted-foreground hover:text-foreground">
@@ -32,7 +32,7 @@ export default async function DistrictDashboard({ params }: { params: Promise<{ 
                     </Link>
 
                     <div className="flex items-center gap-4">
-                        <div className={`h-16 w-2 rounded-full bg-${DISTRICT_COLORS[districtName.toLowerCase()].bg}`} />
+                        <div className={`h-16 w-2 rounded-full ${DISTRICT_COLORS[districtName.toLowerCase()].bg}`} />
                         <div>
                             <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
                                 {district.name}
@@ -84,7 +84,7 @@ export default async function DistrictDashboard({ params }: { params: Promise<{ 
     );
 }
 
-async function CriticalUpdatesBanner({districtId}: {districtId: string}) {
+async function CriticalUpdatesBanner({ districtId }: { districtId: string }) {
     const criticalCount = await getCriticalUpdatesCountByDistrict(districtId);
     if (criticalCount === 0) {
         return null;

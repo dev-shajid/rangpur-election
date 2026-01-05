@@ -7,23 +7,23 @@ const Index = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary/5 via-background to-background">
+      <section className="relative overflow-hidden border-b border-border bg-linear-to-b from-primary/5 via-background to-background">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23000%22%20fill-opacity%3D%220.02%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-50" />
-        
+
         <div className="container mx-auto px-4 py-16 sm:py-24 relative">
           <div className="max-w-3xl mx-auto text-center animate-fade-in">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary mb-6">
               <Vote className="h-4 w-4" />
               <span>National Election 2024</span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
               Rangpur Division
               <span className="block text-primary mt-2">Election Portal</span>
             </h1>
-            
+
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Access real-time election information, candidate details, security updates, 
+              Access real-time election information, candidate details, security updates,
               and incident reports for all 8 districts in Rangpur Division.
             </p>
 

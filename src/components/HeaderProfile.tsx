@@ -49,7 +49,7 @@ export default function HeaderProfile() {
                 <DropdownMenuTrigger asChild>
                     <Avatar className='h-8 w-8 shrink-0 cursor-pointer bg-muted border'>
                         <AvatarImage
-                            src={session?.user.image || "/placeholder.svg"}
+                            src={session?.user.image!}
                             alt={session?.user?.name || "User"}
                         />
                         <AvatarFallback className='text-xs font-medium'>

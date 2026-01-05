@@ -4,7 +4,7 @@ export default function AppLoading() {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section Skeleton */}
-            <section className="relative border-b border-border bg-gradient-to-b from-primary/5 via-background to-background">
+            <section className="relative border-b border-border bg-linear-to-b from-primary/5 via-background to-background">
                 <div className="container mx-auto px-4 py-16 sm:py-24 relative">
                     <div className="max-w-3xl mx-auto text-center animate-pulse">
                         <div className="h-8 w-48 bg-muted rounded-full mx-auto mb-6" />

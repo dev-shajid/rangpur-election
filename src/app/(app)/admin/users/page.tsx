@@ -132,7 +132,7 @@ export default function UsersAdminPage() {
                             onValueChange={(value) => handleRoleChange(row.id, value)}
                             defaultValue={row.role || ""}
                         >
-                            <SelectTrigger className="w-[200px] h-9">
+                            <SelectTrigger className="w-50 h-9">
                                 <SelectValue placeholder="Assign District" />
                             </SelectTrigger>
                             <SelectContent>
