@@ -13,6 +13,8 @@ import { toast } from "sonner"
 import { createUpdate, updateUpdate } from "@/services/update.service"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
+import { getDistrictById } from "@/lib/districts"
+
 const formSchema = z.object({
     location: z.string().min(3, {
         message: "Location must be at least 3 characters.",
@@ -21,7 +23,7 @@ const formSchema = z.object({
         message: "Incident description must be at least 5 characters.",
     }),
     category: z.enum(["normal", "less-critical", "critical"]),
-    requirements: z.string().optional().default("None"),
+    requirements: z.string().min(0),
     action: z.string().min(3, {
         message: "Action taken must be at least 3 characters.",
     }),
@@ -34,13 +36,15 @@ interface UpdateDialogProps {
     onOpenChange: (open: boolean) => void
     update?: Update
     districtId: string
+    upazilaId: string
     onSuccess: () => void
 }
 
-export function UpdateDialog({ open, onOpenChange, update, districtId, onSuccess }: UpdateDialogProps) {
+export function UpdateDialog({ open, onOpenChange, update, districtId, upazilaId, onSuccess }: UpdateDialogProps) {
     const [isPending, startTransition] = useTransition()
 
     const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
         defaultValues: {
             location: "",
             incident: "",
@@ -67,10 +71,10 @@ export function UpdateDialog({ open, onOpenChange, update, districtId, onSuccess
         startTransition(async () => {
             try {
                 if (update?._id) {
-                    await updateUpdate(update._id, values)
+                    await updateUpdate(update._id, { ...values, districtId, upazilaId })
                     toast.success("Update modified successfully")
                 } else {
-                    await createUpdate({ ...values, districtId })
+                    await createUpdate({ ...values, districtId, upazilaId })
                     toast.success("Update created successfully")
                 }
                 onSuccess()

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { getDistrictById } from "@/lib/districts"
-import { getArmyCampsByDistrict, deleteArmyCamp } from "@/services/army.service"
+import { getArmyCampsByUpazila, deleteArmyCamp } from "@/services/army.service"
 import { ArmyCamp } from "@/types"
 import { ArrowLeft, Shield, MapPin, Phone, Users, MoreVertical, Pencil, Trash2, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -21,11 +21,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export default function ArmyCampsPage() {
-    const { name } = useParams()
+    const { name, upazilaId } = useParams()
     const districtName = Array.isArray(name) ? name[0] : name!
     const district = districtName ? getDistrictById(districtName) : null
+    const upazila = upazilaId ? district?.upazilas.find(u => u.id === upazilaId) : null
 
-    if (!district) {
+    if (!district || !upazila) {
         notFound()
     }
 
@@ -39,22 +40,22 @@ export default function ArmyCampsPage() {
     const [editingCamp, setEditingCamp] = React.useState<ArmyCamp | undefined>()
 
     React.useEffect(() => {
-        checkIsAdmin(districtName).then((isAdminUser) => {
+        checkIsAdmin(upazila.id).then((isAdminUser) => {
             setIsAdmin(isAdminUser)
         })
-    }, [districtName])
+    }, [upazila.id])
 
     const fetchData = React.useCallback(async () => {
         setLoading(true)
         try {
-            const data = await getArmyCampsByDistrict(districtName)
+            const data = await getArmyCampsByUpazila(upazila.id)
             setCamps(data)
         } catch (error) {
             toast.error("Failed to load army camps")
         } finally {
             setLoading(false)
         }
-    }, [districtName])
+    }, [upazila.id])
 
     React.useEffect(() => {
         fetchData()
@@ -83,7 +84,7 @@ export default function ArmyCampsPage() {
         if (!confirm(`Are you sure you want to delete ${camp.unit}?`)) return
 
         try {
-            await deleteArmyCamp(camp._id!, districtName)
+            await deleteArmyCamp(camp._id!, district.id, upazila.id)
             toast.success("Army camp deleted successfully")
             fetchData()
         } catch (error) {
@@ -107,7 +108,7 @@ export default function ArmyCampsPage() {
                 </div>
             ),
             sortable: true,
-            width: "250px",
+            width: "200px",
         },
         {
             key: "location",
@@ -117,6 +118,16 @@ export default function ArmyCampsPage() {
                     <MapPin className="h-3.5 w-3.5" />
                     <span>{row.location}</span>
                 </div>
+            ),
+            sortable: true,
+        },
+        {
+            key: "map",
+            header: "Map",
+            accessor: (row) => (
+                <a href={row.map} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" size="sm">View Map</Button>
+                </a>
             ),
             sortable: true,
         },
@@ -177,10 +188,10 @@ export default function ArmyCampsPage() {
     return (
         <div className="container mx-auto px-4 py-8 space-y-8">
             <div>
-                <Link href={`/district/${districtName}`}>
+                <Link href={`/district/${district.id}/${upazila.id}`}>
                     <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-muted-foreground hover:text-foreground">
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to {district.name}
+                        Back to {upazila.nameEn}
                     </Button>
                 </Link>
 
@@ -193,7 +204,7 @@ export default function ArmyCampsPage() {
                             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                 Army Camp Information
                             </h1>
-                            <p className="text-muted-foreground">Security deployment for {district.name}</p>
+                            <p className="text-muted-foreground">{upazila.nameEn} Upazila, {district.name} District</p>
                         </div>
                     </div>
                     {isAdmin && (
@@ -231,7 +242,8 @@ export default function ArmyCampsPage() {
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 camp={editingCamp}
-                districtId={districtName}
+                districtId={district.id}
+                upazilaId={upazila.id}
                 onSuccess={handleDialogSuccess}
             />
         </div>

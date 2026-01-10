@@ -8,7 +8,8 @@ const candidateSchema = new Schema<Candidate>(
         address: { type: String, required: true },
         party: { type: String, required: true },
         contactNumber: { type: String, required: true },
-        districtId: { type: String, required: true, index: true },
+        districtId: { type: String, required: true },
+        upazilaId: { type: String, required: true },
     },
     {
         timestamps: true,

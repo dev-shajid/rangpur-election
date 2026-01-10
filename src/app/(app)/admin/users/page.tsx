@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/button"
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
+    SelectLabel,
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select"
@@ -20,7 +22,6 @@ import {
     UserIcon,
     Trash2,
     MoreVertical,
-    UserCog
 } from "lucide-react"
 import {
     DropdownMenu,
@@ -102,13 +103,13 @@ export default function UsersAdminPage() {
                     return <Badge variant='secondary'>Super Admin</Badge>
                 }
 
-                const district = districts.find(d => d.id === row.role)
-                if (district) {
-                    const color = DISTRICT_COLORS[district.name.toLocaleLowerCase()] 
+                const upazila = districts.find(d => d.upazilas.some(u => u.id === row.role));
+                if (upazila) {
+                    const color = DISTRICT_COLORS[upazila.name.toLocaleLowerCase()]
                     return (
                         <div className="flex items-center gap-2">
                             <Badge variant="outline" className={color.badge}>
-                                Admin: {district.name}
+                                Admin: {row.role && (row.role.charAt(0).toUpperCase() + row.role.slice(1))}
                             </Badge>
                         </div>
                     )
@@ -120,7 +121,7 @@ export default function UsersAdminPage() {
             width: "250px",
         },
         {
-            key: "actions",
+            key: "manage_access",
             header: "Manage Access",
             accessor: (row) => {
                 if (row.role === "superadmin") return null;
@@ -137,33 +138,46 @@ export default function UsersAdminPage() {
                             </SelectTrigger>
                             <SelectContent>
                                 {districts.map((d) => (
-                                    <SelectItem key={d.id} value={d.id}>
-                                        {d.name} Admin
-                                    </SelectItem>
+                                    <SelectGroup key={d.id}>
+                                        <SelectLabel>{d.nameBn}</SelectLabel>
+                                        {
+                                            d.upazilas.map((u) => (
+                                                <SelectItem key={`${d.id}-${u.id}`} value={u.id}>
+                                                    {u.nameBn} Admin
+                                                </SelectItem>
+                                            ))
+                                        }
+                                    </SelectGroup>
                                 ))}
                             </SelectContent>
                         </Select>
-
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm" className="h-9 w-9 p-0">
-                                    <MoreVertical className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                    onClick={() => handleDelete(row.id)}
-                                    className="text-destructive focus:text-destructive"
-                                >
-                                    <Trash2 className="mr-2 h-4 w-4" />
-                                    Delete User
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
                     </div>
                 )
             },
-            width: "300px",
+            width: "100px",
+        },
+        {
+            key: 'actions',
+            header: 'Actions',
+            accessor: (row) => (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm" className="h-9 w-9 p-0">
+                            <MoreVertical className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                            onClick={() => handleDelete(row.id)}
+                            className="text-destructive focus:text-destructive"
+                        >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete User
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ),
+            width: '50px',
         }
     ]
 

@@ -6,14 +6,14 @@ import { Update } from "@/types";
 import { checkAdmin } from "./auth.service";
 import { revalidatePath } from "next/cache";
 
-export async function getUpdatesByDistrict(districtId: string): Promise<Update[]> {
+export async function getUpdatesByDistrict(upazilaId: string): Promise<Update[]> {
     try {
         await dbConnect();
         // Sort by time descending (newest first)
         // Note: 'time' is stored as string in current mock data (e.g. "2026-01-15T14:30:00Z"), 
         // so standard string sort works for ISO dates, but complex strings might need special handling.
         // Assuming ISO format from seed.
-        const updates = await UpdateModel.find({ districtId }).lean();
+        const updates = await UpdateModel.find({ upazilaId }).lean();
         return updates
             .map(u => ({
                 ...u,
@@ -28,10 +28,10 @@ export async function getUpdatesByDistrict(districtId: string): Promise<Update[]
     }
 }
 
-export async function getCriticalUpdatesCountByDistrict(districtId: string): Promise<number> {
+export async function getCriticalUpdatesCountByDistrict(upazilaId: string): Promise<number> {
     try {
         await dbConnect();
-        const updateCount = await UpdateModel.countDocuments({ districtId, category: "critical" });
+        const updateCount = await UpdateModel.countDocuments({ upazilaId, category: "critical" });
         return updateCount;
     } catch (error) {
         console.error("Error fetching updates:", error);
@@ -44,7 +44,7 @@ export async function createUpdate(data: Omit<Update, "_id" | "id">) {
     await dbConnect()
 
     const newUpdate = await UpdateModel.create(data)
-    revalidatePath(`/district/${data.districtId}/updates`)
+    revalidatePath(`/district/${data.districtId}/${data.upazilaId}/updates`)
     return JSON.parse(JSON.stringify(newUpdate))
 }
 
@@ -59,15 +59,15 @@ export async function updateUpdate(id: string, data: Partial<Update>) {
     const updatedUpdate = await UpdateModel.findByIdAndUpdate(id, data, { new: true })
     if (!updatedUpdate) throw new Error("Update not found")
 
-    revalidatePath(`/district/${updatedUpdate.districtId}/updates`)
+    revalidatePath(`/district/${updatedUpdate.districtId}/${updatedUpdate.upazilaId}/updates`)
     return JSON.parse(JSON.stringify(updatedUpdate))
 }
 
-export async function deleteUpdate(id: string, districtId: string) {
+export async function deleteUpdate(id: string, districtId: string, upazilaId: string) {
     await checkAdmin(districtId)
     await dbConnect()
 
     await UpdateModel.findByIdAndDelete(id)
-    revalidatePath(`/district/${districtId}/updates`)
+    revalidatePath(`/district/${districtId}/${upazilaId}/updates`)
     return { success: true }
 }

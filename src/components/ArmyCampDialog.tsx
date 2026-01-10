@@ -12,12 +12,17 @@ import { ArmyCamp } from "@/types"
 import { toast } from "sonner"
 import { createArmyCamp, updateArmyCamp } from "@/services/army.service"
 
+import { getDistrictById } from "@/lib/districts"
+
 const formSchema = z.object({
     unit: z.string().min(2, {
         message: "Unit name must be at least 2 characters.",
     }),
     location: z.string().min(3, {
         message: "Location must be at least 3 characters.",
+    }),
+    map: z.string().min(3, {
+        message: "Map must be a valid map link.",
     }),
     manpower: z.number().min(1, {
         message: "Manpower must be at least 1.",
@@ -32,17 +37,20 @@ interface ArmyCampDialogProps {
     onOpenChange: (open: boolean) => void
     camp?: ArmyCamp
     districtId: string
+    upazilaId: string
     onSuccess: () => void
 }
 
-export function ArmyCampDialog({ open, onOpenChange, camp, districtId, onSuccess }: ArmyCampDialogProps) {
+export function ArmyCampDialog({ open, onOpenChange, camp, districtId, upazilaId, onSuccess }: ArmyCampDialogProps) {
     const [isPending, startTransition] = useTransition()
+    const district = getDistrictById(districtId)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             unit: camp?.unit || "",
             location: camp?.location || "",
+            map: camp?.map || "",
             manpower: camp?.manpower || 0,
             contactNumber: camp?.contactNumber || "",
         },
@@ -54,6 +62,7 @@ export function ArmyCampDialog({ open, onOpenChange, camp, districtId, onSuccess
             form.reset({
                 unit: camp?.unit || "",
                 location: camp?.location || "",
+                map: camp?.map || "",
                 manpower: camp?.manpower || 0,
                 contactNumber: camp?.contactNumber || "",
             })
@@ -64,10 +73,10 @@ export function ArmyCampDialog({ open, onOpenChange, camp, districtId, onSuccess
         startTransition(async () => {
             try {
                 if (camp?._id) {
-                    await updateArmyCamp(camp._id, values)
+                    await updateArmyCamp(camp._id, { ...values, districtId, upazilaId })
                     toast.success("Army camp updated successfully")
                 } else {
-                    await createArmyCamp({ ...values, districtId })
+                    await createArmyCamp({ ...values, districtId, upazilaId })
                     toast.success("Army camp created successfully")
                 }
                 onSuccess()
@@ -80,7 +89,7 @@ export function ArmyCampDialog({ open, onOpenChange, camp, districtId, onSuccess
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-125">
                 <DialogHeader>
                     <DialogTitle>{camp ? "Edit Army Camp" : "Add New Army Camp"}</DialogTitle>
                     <DialogDescription>
@@ -110,6 +119,19 @@ export function ArmyCampDialog({ open, onOpenChange, camp, districtId, onSuccess
                                     <FormLabel>Location</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter location" disabled={isPending} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="map"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Map</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter map link" disabled={isPending} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

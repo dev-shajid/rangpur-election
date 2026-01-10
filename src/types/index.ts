@@ -2,22 +2,25 @@ import { DistrictName } from "@/lib/constants";
 
 export interface Candidate {
   id?: string;
-  _id?: string; // MongoDB ID
+  _id?: string;
   name: string;
   address: string;
   party: string;
   contactNumber: string;
   districtId: string;
+  upazilaId: string;
 }
 
 export interface ArmyCamp {
   id?: string;
-  _id?: string; // MongoDB ID
+  _id?: string; 
   unit: string;
   location: string;
+  map: string;
   manpower: number;
   contactNumber: string;
   districtId: string;
+  upazilaId: string;
 }
 
 export type IncidentCategory = "normal" | "less-critical" | "critical";
@@ -31,6 +34,7 @@ export interface Update {
   requirements?: string;
   action: string;
   districtId: string;
+  upazilaId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

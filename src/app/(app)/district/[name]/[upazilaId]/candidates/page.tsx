@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { getDistrictById } from "@/lib/districts"
-import { getCandidatesByDistrict, deleteCandidate } from "@/services/candidate.service"
+import { getCandidatesByUpazila, deleteCandidate } from "@/services/candidate.service"
 import { Candidate } from "@/types"
 import { ArrowLeft, Users, Phone, MapPin, MoreVertical, Pencil, Trash2, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -20,26 +20,26 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useSession } from "next-auth/react"
 import { useCallback, useEffect, useMemo } from "react"
 
 export default function CandidatesPage() {
-    const { name } = useParams()
+    const { name, upazilaId } = useParams()
     const districtName = Array.isArray(name) ? name[0] : name!
     const district = districtName ? getDistrictById(districtName) : null
-    const { data: session } = useSession()
+    const upazila = upazilaId ? district?.upazilas.find(u => u.id === upazilaId) : null
 
-    if (!district) {
+
+    if (!district || !upazila) {
         notFound()
     }
 
     const [isAdmin, setIsAdmin] = React.useState(false)
 
     useEffect(() => {
-        checkIsAdmin(districtName).then((isAdminUser) => {
+        checkIsAdmin(upazila?.id).then((isAdminUser) => {
             setIsAdmin(isAdminUser)
         })
-    }, [districtName])
+    }, [upazila?.id])
 
     const [candidates, setCandidates] = React.useState<Candidate[]>([])
     const [loading, setLoading] = React.useState(true)
@@ -52,14 +52,14 @@ export default function CandidatesPage() {
     const fetchData = useCallback(async () => {
         setLoading(true)
         try {
-            const data = await getCandidatesByDistrict(districtName)
+            const data = await getCandidatesByUpazila(district.id, upazila?.id)
             setCandidates(data)
         } catch (error) {
             toast.error("Failed to load candidates")
         } finally {
             setLoading(false)
         }
-    }, [districtName])
+    }, [district.id, upazila?.id])
 
     useEffect(() => {
         fetchData()
@@ -89,7 +89,7 @@ export default function CandidatesPage() {
         if (!confirm(`Are you sure you want to delete ${candidate.name}?`)) return
 
         try {
-            await deleteCandidate(candidate._id!, districtName)
+            await deleteCandidate(candidate._id!, district.id, upazila?.id!)
             toast.success("Candidate deleted successfully")
             fetchData()
         } catch (error) {
@@ -98,8 +98,8 @@ export default function CandidatesPage() {
     }
 
     const handleDialogSuccess = () => {
-        fetchData()
         setEditingCandidate(undefined)
+        fetchData()
     }
 
     const columns: Column<Candidate>[] = [
@@ -179,10 +179,10 @@ export default function CandidatesPage() {
     return (
         <div className="container mx-auto px-4 py-8 space-y-8">
             <div>
-                <Link href={`/district/${districtName}`}>
+                <Link href={`/district/${district.id}/${upazila.id}`}>
                     <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-muted-foreground hover:text-foreground">
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to {district.name}
+                        Back to {upazila.nameEn}
                     </Button>
                 </Link>
 
@@ -195,7 +195,7 @@ export default function CandidatesPage() {
                             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                 Candidate Information
                             </h1>
-                            <p className="text-muted-foreground">{district.name} District</p>
+                            <p className="text-muted-foreground">{upazila.nameEn} Upazila, {district.name} District</p>
                         </div>
                     </div>
                     {isAdmin && (
@@ -233,7 +233,8 @@ export default function CandidatesPage() {
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 candidate={editingCandidate}
-                districtId={districtName}
+                districtId={district.id}
+                upazilaId={upazila?.id}
                 onSuccess={handleDialogSuccess}
             />
         </div>

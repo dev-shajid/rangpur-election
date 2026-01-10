@@ -28,7 +28,11 @@ const DistrictCard = ({ district, index }: DistrictCardProps) => {
                         <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
                             {district.name}
                         </h3>
-                        <p className="text-lg text-muted-foreground">{district.nameBn}</p>
+                        <div className="flex items-center gap-2">
+                            <p className="text-lg text-muted-foreground">{district.nameBn}</p>
+                            <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
+                            <p className="text-sm text-muted-foreground">{district.upazilas.length} Upazilas</p>
+                        </div>
                     </div>
 
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">

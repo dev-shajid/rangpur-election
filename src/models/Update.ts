@@ -13,7 +13,8 @@ const updateSchema = new Schema<Update>(
         },
         requirements: { type: String, default: 'None' },
         action: { type: String, required: true },
-        districtId: { type: String, required: true, index: true },
+        districtId: { type: String, required: true },
+        upazilaId: { type: String, required: true },
     },
     {
         timestamps: true,

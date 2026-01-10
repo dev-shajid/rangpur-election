@@ -72,6 +72,11 @@ export default function HeaderProfile() {
                             <p className='text-xs text-muted-foreground truncate leading-tight'>
                                 {session?.user?.email ?? "abc@gmail.com"}
                             </p>
+                            {session?.user?.role && (
+                                <span className='mt-1.5 inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground border'>
+                                    {session.user.role}
+                                </span>
+                            )}
                         </div>
                     </>
                     <DropdownMenuSeparator className='my-1' />

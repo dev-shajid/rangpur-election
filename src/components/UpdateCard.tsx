@@ -54,9 +54,11 @@ const UpdateCard = ({ update }: UpdateCardProps) => {
                             <Clock className="h-3.5 w-3.5" />
                             <span>{formattedTime}</span>
                         </div>
-                        <div className="flex items-center gap-2 mt-1">
-                            <MapPin className="h-3.5 w-3.5 opacity-70" />
-                            <span className="font-medium">{update.location}</span>
+                        <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-1">
+                            <div className="flex items-center gap-2">
+                                <MapPin className="h-3.5 w-3.5 opacity-70" />
+                                <span className="font-medium">{update.location}</span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -22,8 +22,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const UpdatesPage = () => {
-    const { name: districtName } = useParams<{ name: string }>();
+    const { name: districtName, upazilaId } = useParams<{ name: string, upazilaId: string }>();
     const district = districtName ? getDistrictById(districtName) : null;
+    const upazila = upazilaId ? district?.upazilas.find(u => u.id === upazilaId) : null;
     const [filter, setFilter] = useState<IncidentCategory | "all">("all");
     const [updates, setUpdates] = useState<Update[]>([]);
     const [loading, setLoading] = useState(true);
@@ -31,28 +32,28 @@ const UpdatesPage = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingUpdate, setEditingUpdate] = useState<Update | undefined>();
 
-    if (!district) {
+    if (!district || !upazila) {
         notFound();
     }
 
     useEffect(() => {
-        checkIsAdmin(districtName).then((isAdminUser) => {
+        checkIsAdmin(upazila?.id).then((isAdminUser) => {
             setIsAdmin(isAdminUser);
         });
-    }, [districtName]);
+    }, [upazila?.id]);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
 
         try {
-            const data = await getUpdatesByDistrict(district.id);
+            const data = await getUpdatesByDistrict(upazila?.id);
             setUpdates(data);
         } catch (error) {
             toast.error("Failed to load updates");
         } finally {
             setLoading(false);
         }
-    }, [district.id]);
+    }, [upazila?.id]);
 
     useEffect(() => {
         fetchData();
@@ -87,7 +88,7 @@ const UpdatesPage = () => {
         if (!confirm(`Are you sure you want to delete this update?`)) return;
 
         try {
-            await deleteUpdate(update._id!, district.id);
+            await deleteUpdate(update._id!, district.id, upazila.id);
             toast.success("Update deleted successfully");
             fetchData();
         } catch (error) {
@@ -103,10 +104,10 @@ const UpdatesPage = () => {
     return (
         <div className="min-h-screen bg-background">
             <div className="container mx-auto px-4 py-8">
-                <Link href={`/district/${districtName}`}>
+                <Link href={`/district/${district.id}/${upazila.id}`}>
                     <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-muted-foreground hover:text-foreground">
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to {district.name}
+                        Back to {upazila.nameEn}
                     </Button>
                 </Link>
 
@@ -117,9 +118,9 @@ const UpdatesPage = () => {
                         </div>
                         <div>
                             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                                Latest Updates
+                                Security Updates
                             </h1>
-                            <p className="text-muted-foreground">{district.name} District</p>
+                            <p className="text-muted-foreground">{upazila.nameEn} Upazila, {district.name} District</p>
                         </div>
                     </div>
                     {isAdmin && (
@@ -150,7 +151,7 @@ const UpdatesPage = () => {
                                     }`}
                             >
                                 {btn.label}
-                                <Badge variant="secondary" className="ml-1 h-5 min-w-[1.25rem] px-1.5">
+                                <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1.5">
                                     {categoryCounts[btn.value]}
                                 </Badge>
                             </button>
@@ -217,6 +218,7 @@ const UpdatesPage = () => {
                 onOpenChange={setDialogOpen}
                 update={editingUpdate}
                 districtId={district.id}
+                upazilaId={upazila.id}
                 onSuccess={handleDialogSuccess}
             />
         </div>

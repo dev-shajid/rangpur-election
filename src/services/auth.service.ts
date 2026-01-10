@@ -59,10 +59,19 @@ export async function checkAdmin(districtId?: string) {
         userRole = user?.role as Role
     }
 
-    // Strict check: User role must exactly match the districtId for data management
-    if (!userRole || userRole !== districtId) {
+    if (!userRole) {
         throw new Error("Unauthorized")
     }
 
-    return true
+    // Superadmin has access to everything
+    if (userRole === "superadmin") {
+        return true
+    }
+
+    // District admin has access only to their district
+    if (districtId && userRole === districtId) {
+        return true
+    }
+
+    throw new Error("Unauthorized")
 }

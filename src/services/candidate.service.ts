@@ -6,10 +6,11 @@ import { Candidate } from "@/types";
 import { checkAdmin } from "./auth.service";
 import { revalidatePath } from "next/cache";
 
-export async function getCandidatesByDistrict(districtId: string): Promise<Candidate[]> {
+export async function getCandidatesByUpazila(districtId: string, upazilaId: string): Promise<Candidate[]> {
     try {
         await dbConnect();
-        const candidates = await CandidateModel.find({ districtId }).lean();
+        const candidates = await CandidateModel.find({ upazilaId }).lean();
+        console.log(candidates)
 
         // Convert _id to string id for frontend compatibility
         return candidates.map(c => ({
@@ -24,11 +25,11 @@ export async function getCandidatesByDistrict(districtId: string): Promise<Candi
 }
 
 export async function createCandidate(data: Omit<Candidate, "_id" | "id">) {
-    await checkAdmin(data.districtId)
+    await checkAdmin(data.upazilaId);
     await dbConnect()
 
     const newCandidate = await CandidateModel.create(data)
-    revalidatePath(`/district/${data.districtId}/candidates`)
+    revalidatePath(`/district/${data.districtId}/${data.upazilaId}/candidates`)
     return JSON.parse(JSON.stringify(newCandidate))
 }
 
@@ -37,20 +38,20 @@ export async function updateCandidate(id: string, data: Partial<Candidate>) {
     const currentCandidate = await CandidateModel.findById(id)
     if (!currentCandidate) throw new Error("Candidate not found")
 
-    await checkAdmin(currentCandidate.districtId)
+    await checkAdmin(currentCandidate.upazilaId)
 
     const updatedCandidate = await CandidateModel.findByIdAndUpdate(id, data, { new: true })
     if (!updatedCandidate) throw new Error("Candidate not found")
 
-    revalidatePath(`/district/${updatedCandidate.districtId}/candidates`)
+    revalidatePath(`/district/${updatedCandidate.districtId}/${updatedCandidate.upazilaId}/candidates`)
     return JSON.parse(JSON.stringify(updatedCandidate))
 }
 
-export async function deleteCandidate(id: string, districtId: string) {
-    await checkAdmin(districtId)
+export async function deleteCandidate(id: string, districtId: string, upazilaId: string) {
+    await checkAdmin(upazilaId)
     await dbConnect()
 
     await CandidateModel.findByIdAndDelete(id)
-    revalidatePath(`/district/${districtId}/candidates`)
+    revalidatePath(`/district/${districtId}/${upazilaId}/candidates`)
     return { success: true }
 }

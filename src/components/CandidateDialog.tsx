@@ -32,10 +32,11 @@ interface CandidateDialogProps {
     onOpenChange: (open: boolean) => void
     candidate?: Candidate
     districtId: string
+    upazilaId: string
     onSuccess: () => void
 }
 
-export function CandidateDialog({ open, onOpenChange, candidate, districtId, onSuccess }: CandidateDialogProps) {
+export function CandidateDialog({ open, onOpenChange, candidate, districtId, upazilaId, onSuccess }: CandidateDialogProps) {
     const [isPending, startTransition] = useTransition()
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -64,10 +65,10 @@ export function CandidateDialog({ open, onOpenChange, candidate, districtId, onS
         startTransition(async () => {
             try {
                 if (candidate?._id) {
-                    await updateCandidate(candidate._id, values)
+                    await updateCandidate(candidate._id, { ...values, districtId, upazilaId })
                     toast.success("Candidate updated successfully")
                 } else {
-                    await createCandidate({ ...values, districtId })
+                    await createCandidate({ ...values, districtId, upazilaId })
                     toast.success("Candidate created successfully")
                 }
                 onSuccess()
@@ -80,7 +81,7 @@ export function CandidateDialog({ open, onOpenChange, candidate, districtId, onS
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-125">
                 <DialogHeader>
                     <DialogTitle>{candidate ? "Edit Candidate" : "Add New Candidate"}</DialogTitle>
                     <DialogDescription>
