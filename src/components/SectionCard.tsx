@@ -46,7 +46,7 @@ const SectionCard = ({ title, description, icon: Icon, to, color }: SectionCardP
           </div>
 
           <div className="mt-5">
-            <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+            <h3 className="text-lg font-semibold text-foreground group-hover:text-foreground transition-colors">
               {title}
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">{description}</p>
@@ -54,7 +54,7 @@ const SectionCard = ({ title, description, icon: Icon, to, color }: SectionCardP
         </CardHeader>
 
         <CardContent>
-          <div className="mt-4 flex items-center gap-1 text-sm font-medium text-primary">
+          <div className="mt-4 flex items-center gap-1 text-sm font-medium text-foreground group-hover:text-primary transition-colors">
             <span>View details</span>
             <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </div>

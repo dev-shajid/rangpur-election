@@ -13,7 +13,7 @@ export interface Candidate {
 
 export interface ArmyCamp {
   id?: string;
-  _id?: string; 
+  _id?: string;
   unit: string;
   location: string;
   map: string;
@@ -37,6 +37,18 @@ export interface Update {
   upazilaId: string;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface PollingInfo {
+  id?: string;
+  _id?: string;
+  serial: string;
+  name: string;
+  constituency: string;
+  phoneNumber: string;
+  location: string;
+  districtId: string;
+  upazilaId: string;
 }
 
 export type Role = "superadmin" | DistrictName

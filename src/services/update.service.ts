@@ -40,7 +40,7 @@ export async function getCriticalUpdatesCountByDistrict(upazilaId: string): Prom
 }
 
 export async function createUpdate(data: Omit<Update, "_id" | "id">) {
-    await checkAdmin(data.districtId)
+    await checkAdmin(data.upazilaId)
     await dbConnect()
 
     const newUpdate = await UpdateModel.create(data)
@@ -54,7 +54,7 @@ export async function updateUpdate(id: string, data: Partial<Update>) {
     const currentUpdate = await UpdateModel.findById(id)
     if (!currentUpdate) throw new Error("Update not found")
 
-    await checkAdmin(currentUpdate.districtId)
+    await checkAdmin(currentUpdate.upazilaId)
 
     const updatedUpdate = await UpdateModel.findByIdAndUpdate(id, data, { new: true })
     if (!updatedUpdate) throw new Error("Update not found")
@@ -64,7 +64,7 @@ export async function updateUpdate(id: string, data: Partial<Update>) {
 }
 
 export async function deleteUpdate(id: string, districtId: string, upazilaId: string) {
-    await checkAdmin(districtId)
+    await checkAdmin(upazilaId)
     await dbConnect()
 
     await UpdateModel.findByIdAndDelete(id)

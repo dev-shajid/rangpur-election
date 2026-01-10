@@ -10,7 +10,6 @@ export async function getCandidatesByUpazila(districtId: string, upazilaId: stri
     try {
         await dbConnect();
         const candidates = await CandidateModel.find({ upazilaId }).lean();
-        console.log(candidates)
 
         // Convert _id to string id for frontend compatibility
         return candidates.map(c => ({

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Radio, Shield, Users } from "lucide-react";
+import { ArrowLeft, ClipboardList, Radio, Shield, Users } from "lucide-react";
 import { getCriticalUpdatesCountByDistrict } from "@/services/update.service";
 import { getUpazilaById } from '@/lib/districts';
 import SectionCard from '@/components/SectionCard';
@@ -48,7 +48,7 @@ export default async function UpazilaDashboard({ params }: { params: Promise<{ n
                     Election Information
                 </h2>
 
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <SectionCard
                         title="Candidate Information"
                         description="View all registered candidates, their party affiliations, and contact details"
@@ -71,6 +71,14 @@ export default async function UpazilaDashboard({ params }: { params: Promise<{ n
                         icon={Radio}
                         to={`/district/${districtId}/${upazila.id}/updates`}
                         color="warning"
+                    />
+
+                    <SectionCard
+                        title="Polling Information"
+                        description="Manage and view polling center details, serial numbers, and locations"
+                        icon={ClipboardList}
+                        to={`/district/${districtId}/${upazila.id}/polling`}
+                        color="primary"
                     />
                 </div>
 

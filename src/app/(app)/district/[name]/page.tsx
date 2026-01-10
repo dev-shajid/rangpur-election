@@ -57,7 +57,7 @@ export default async function DistrictDashboard({ params }: { params: Promise<{ 
                 className="group relative p-4 rounded-md border border-border bg-card/60 backdrop-blur hover:bg-card hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
                 {/* Accent dot */}
-                <span className={cn("absolute top-3 right-3 h-2 w-2 rounded-full transition-colors", session?.user?.role === upazila.id ? "bg-green-500" : "bg-primary/40 group-hover:bg-primary")} />
+                <span className={cn("absolute top-3 right-3 h-2 w-2 rounded-full transition-colors", session?.user?.role === upazila.id ? "bg-green-500" : "bg-foreground/40 group-hover:bg-foreground")} />
 
                 {/* Content */}
                 <div className="flex flex-col gap-1">
@@ -67,7 +67,7 @@ export default async function DistrictDashboard({ params }: { params: Promise<{ 
                   </span>
 
                   {/* English name */}
-                  <span className="text-xs uppercase tracking-wide text-muted-foreground group-hover:text-primary transition-colors">
+                  <span className="text-xs uppercase tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
                     {upazila.nameEn}
                   </span>
                 </div>
