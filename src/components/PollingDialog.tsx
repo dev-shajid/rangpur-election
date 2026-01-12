@@ -19,6 +19,9 @@ const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
     }),
+    map: z.string().min(3, {
+        message: "Map must be a valid map link.",
+    }),
     constituency: z.string().min(2, {
         message: "Constituency must be at least 2 characters.",
     }),
@@ -47,6 +50,7 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
         defaultValues: {
             serial: pollingInfo?.serial || "",
             name: pollingInfo?.name || "",
+            map: pollingInfo?.map || "",
             constituency: pollingInfo?.constituency || "",
             phoneNumber: pollingInfo?.phoneNumber || "",
             location: pollingInfo?.location || "",
@@ -59,6 +63,7 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
             form.reset({
                 serial: pollingInfo?.serial || "",
                 name: pollingInfo?.name || "",
+                map: pollingInfo?.map || "",
                 constituency: pollingInfo?.constituency || "",
                 phoneNumber: pollingInfo?.phoneNumber || "",
                 location: pollingInfo?.location || "",
@@ -155,6 +160,19 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
                                     <FormLabel>Location</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter location" disabled={isPending} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="map"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Map</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter map link" disabled={isPending} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

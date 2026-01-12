@@ -44,6 +44,7 @@ export interface PollingInfo {
   _id?: string;
   serial: string;
   name: string;
+  map: string;
   constituency: string;
   phoneNumber: string;
   location: string;

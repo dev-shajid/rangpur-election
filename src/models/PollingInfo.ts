@@ -6,6 +6,7 @@ const pollingInfoSchema = new Schema<PollingInfo>(
     {
         serial: { type: String, required: true },
         name: { type: String, required: true },
+        map: { type: String, required: true },
         constituency: { type: String, required: true },
         phoneNumber: { type: String, required: true },
         location: { type: String, required: true },

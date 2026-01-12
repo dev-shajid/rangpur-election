@@ -147,6 +147,16 @@ export default function PollingPage() {
             sortable: true,
         },
         {
+            key: "map",
+            header: "Map",
+            accessor: (row) => (
+                <a href={row.map} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" size="sm">View Map</Button>
+                </a>
+            ),
+            sortable: true,
+        },
+        {
             key: "phoneNumber",
             header: "Phone",
             accessor: (row) => (
