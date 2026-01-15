@@ -147,6 +147,17 @@ export default function CandidatesPage() {
             ),
             width: "200px",
         },
+        {
+            key: "more" as keyof Candidate,
+            header: "View More",
+            accessor: (row: Candidate) => (
+                // show drive pdf
+                <Button size="sm">
+                    View
+                </Button>
+            ),
+            width: "50px",
+        },
         ...(isAdmin ? [{
             key: "actions" as keyof Candidate,
             header: "",

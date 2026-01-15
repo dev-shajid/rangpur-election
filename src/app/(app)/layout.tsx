@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import WatermarkLayout from "@/components/Watermark";
 
 export default function DistrictLayout({
     children,
@@ -7,6 +8,7 @@ export default function DistrictLayout({
 }) {
     return (
         <div className="min-h-screen bg-background">
+            <WatermarkLayout />
             <Header />
             <>
                 {children}

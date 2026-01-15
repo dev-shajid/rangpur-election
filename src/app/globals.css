@@ -164,7 +164,7 @@
   }
 
   .section-card {
-    @apply rounded-xl border border-border bg-card p-6 transition-all duration-200;
+    @apply rounded-xl border border-border bg-card/50 backdrop-blur-sm p-6 transition-all duration-200;
     box-shadow: var(--shadow-card);
   }
 

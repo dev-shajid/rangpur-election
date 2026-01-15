@@ -9,8 +9,10 @@ const pollingInfoSchema = new Schema<PollingInfo>(
         map: { type: String, required: true },
         constituency: { type: String, required: true },
         phoneNumber: { type: String, required: true },
-        location: { type: String, required: true },
+        address: { type: String, required: true },
         districtId: { type: String, required: true },
+        pollingAgent: { type: String, required: true },
+        responsiblePersonnel: { type: String, required: true },
         upazilaId: { type: String, required: true },
     },
     {

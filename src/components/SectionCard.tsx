@@ -35,31 +35,22 @@ const SectionCard = ({ title, description, icon: Icon, to, color }: SectionCardP
     <Link
       href={to}
     >
-      <Card
-        className={`group block ${styles.hoverBorder}`}
-      >
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className={`flex h-14 w-14 items-center justify-center rounded-xl ${styles.iconBg}`}>
-              <Icon className={`h-7 w-7 ${styles.iconColor}`} />
-            </div>
+      <div className={`section-card group block ${styles.hoverBorder}`}>
+        <div className="flex items-start justify-between">
+          <div className={`flex h-14 w-14 items-center justify-center rounded-xl ${styles.iconBg}`}>
+            <Icon className={`h-7 w-7 ${styles.iconColor}`} />
           </div>
+        </div>
+        <h3 className="mt-4 text-lg font-semibold text-foreground">{title}</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {description}
+        </p>
 
-          <div className="mt-5">
-            <h3 className="text-lg font-semibold text-foreground group-hover:text-foreground transition-colors">
-              {title}
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-          </div>
-        </CardHeader>
-
-        <CardContent>
-          <div className="mt-4 flex items-center gap-1 text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-            <span>View details</span>
-            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </div>
-        </CardContent>
-      </Card>
+        <div className="mt-4 flex items-center gap-1 text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+          <span>View details</span>
+          <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </div>
+      </div>
     </Link>
   );
 };

@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function SignUpPage() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-secondary py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center bg-secondary/30 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 animate-in fade-in zoom-in-95 duration-500">
                 <div className="bg-background p-8 rounded shadow-md w-96">
                     <div className="flex flex-col items-center justify-center mb-6">

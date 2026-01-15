@@ -1,9 +1,16 @@
 import { Shield } from 'lucide-react'
+import Image from 'next/image'
 
 export default function Logo() {
     return (
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-105">
-            <Shield className="h-5 w-5" />
+        <div className="flex size-12 items-center justify-center rounded-lg transition-transform group-hover:scale-105">
+            <Image
+                src="/logo.jpeg"
+                alt="Logo"
+                width={100}
+                height={100}
+                className="rounded-md"
+            />
         </div>
     )
 }

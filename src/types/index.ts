@@ -47,7 +47,9 @@ export interface PollingInfo {
   map: string;
   constituency: string;
   phoneNumber: string;
-  location: string;
+  address: string;
+  pollingAgent: string;
+  responsiblePersonnel: string;
   districtId: string;
   upazilaId: string;
 }

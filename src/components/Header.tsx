@@ -12,8 +12,7 @@ const Header = () => {
                     <Link href="/" className="flex items-center gap-3 group">
                         <Logo />
                         <div className="hidden sm:block">
-                            <h1 className="text-lg font-semibold text-foreground">Rangpur Division</h1>
-                            <p className="text-xs text-muted-foreground">Election Information Portal</p>
+                            <h1 className="text- font-semibold text-foreground">66 INFANTRY DIVISION RANGPUR</h1>
                         </div>
                     </Link>
 

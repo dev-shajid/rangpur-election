@@ -28,8 +28,14 @@ const formSchema = z.object({
     phoneNumber: z.string().min(10, {
         message: "Phone number must be at least 10 characters.",
     }),
-    location: z.string().min(3, {
-        message: "Location must be at least 3 characters.",
+    address: z.string().min(3, {
+        message: "Address must be at least 3 characters.",
+    }),
+    pollingAgent: z.string().min(3, {
+        message: "Polling agent must be at least 3 characters.",
+    }),
+    responsiblePersonnel: z.string().min(3, {
+        message: "Responsible personnel must be at least 3 characters.",
     }),
 })
 
@@ -53,7 +59,9 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
             map: pollingInfo?.map || "",
             constituency: pollingInfo?.constituency || "",
             phoneNumber: pollingInfo?.phoneNumber || "",
-            location: pollingInfo?.location || "",
+            address: pollingInfo?.address || "",
+            pollingAgent: pollingInfo?.pollingAgent || "",
+            responsiblePersonnel: pollingInfo?.responsiblePersonnel || "",
         },
     })
 
@@ -66,7 +74,7 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
                 map: pollingInfo?.map || "",
                 constituency: pollingInfo?.constituency || "",
                 phoneNumber: pollingInfo?.phoneNumber || "",
-                location: pollingInfo?.location || "",
+                address: pollingInfo?.address || "",
             })
         }
     }, [pollingInfo, open, form])
@@ -154,12 +162,12 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
                         />
                         <FormField
                             control={form.control}
-                            name="location"
+                            name="address"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Location</FormLabel>
+                                    <FormLabel>Address</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter location" disabled={isPending} {...field} />
+                                        <Input placeholder="Enter address" disabled={isPending} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -173,6 +181,32 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
                                     <FormLabel>Map</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter map link" disabled={isPending} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="pollingAgent"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Polling Agent</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter polling agent" disabled={isPending} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="responsiblePersonnel"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Responsible Personnel</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter responsible personnel" disabled={isPending} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

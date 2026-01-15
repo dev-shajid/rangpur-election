@@ -71,7 +71,7 @@ export default function PollingPage() {
         return pollingData.filter(p =>
             p.name.toLowerCase().includes(lowerQ) ||
             p.constituency.toLowerCase().includes(lowerQ) ||
-            p.location.toLowerCase().includes(lowerQ) ||
+            p.address.toLowerCase().includes(lowerQ) ||
             p.serial.toLowerCase().includes(lowerQ)
         )
     }, [pollingData, searchQuery])
@@ -136,12 +136,12 @@ export default function PollingPage() {
             width: "200px",
         },
         {
-            key: "location",
-            header: "Location",
+            key: "address",
+            header: "Address",
             accessor: (row) => (
                 <div className="flex items-center gap-2 text-muted-foreground">
                     <MapPin className="h-3.5 w-3.5" />
-                    <span>{row.location}</span>
+                    <span>{row.address}</span>
                 </div>
             ),
             sortable: true,
@@ -154,7 +154,20 @@ export default function PollingPage() {
                     <Button variant="outline" size="sm">View Map</Button>
                 </a>
             ),
-            sortable: true,
+        },
+        {
+            key: "pollingAgent",
+            header: "Polling Agent",
+            accessor: (row) => (
+                <div className="font-medium text-foreground">{row.pollingAgent}</div>
+            ),
+        },
+        {
+            key: "responsiblePersonnel",
+            header: "Responsible Personnel",
+            accessor: (row) => (
+                <div className="font-medium text-foreground">{row.responsiblePersonnel}</div>
+            ),
         },
         {
             key: "phoneNumber",
