@@ -25,6 +25,9 @@ const formSchema = z.object({
     contactNumber: z.string().min(10, {
         message: "Contact number must be at least 10 characters.",
     }),
+    driveFileId: z.string().min(2, {
+        message: "Drive file ID is required.",
+    }),
 })
 
 interface CandidateDialogProps {
@@ -46,6 +49,7 @@ export function CandidateDialog({ open, onOpenChange, candidate, districtId, upa
             party: candidate?.party || "",
             address: candidate?.address || "",
             contactNumber: candidate?.contactNumber || "",
+            driveFileId: candidate?.driveFileId || "",
         },
     })
 
@@ -57,6 +61,7 @@ export function CandidateDialog({ open, onOpenChange, candidate, districtId, upa
                 party: candidate?.party || "",
                 address: candidate?.address || "",
                 contactNumber: candidate?.contactNumber || "",
+                driveFileId: candidate?.driveFileId || "",
             })
         }
     }, [candidate, open, form])
@@ -137,6 +142,19 @@ export function CandidateDialog({ open, onOpenChange, candidate, districtId, upa
                                     <FormLabel>Contact Number</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter contact number" disabled={isPending} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="driveFileId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Drive File ID</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter drive file ID" disabled={isPending} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

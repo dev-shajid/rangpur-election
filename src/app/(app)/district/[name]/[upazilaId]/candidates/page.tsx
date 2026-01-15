@@ -151,8 +151,11 @@ export default function CandidatesPage() {
             key: "more" as keyof Candidate,
             header: "View More",
             accessor: (row: Candidate) => (
-                // show drive pdf
-                <Button size="sm">
+                <Button
+                    size="sm"
+                    onClick={() => window.open(`https://drive.google.com/file/d/${row.driveFileId}`, "_blank")}
+                    variant="outline"
+                >
                     View
                 </Button>
             ),

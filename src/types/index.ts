@@ -9,6 +9,7 @@ export interface Candidate {
   contactNumber: string;
   districtId: string;
   upazilaId: string;
+  driveFileId: string;
 }
 
 export interface ArmyCamp {

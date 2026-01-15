@@ -10,6 +10,7 @@ const candidateSchema = new Schema<Candidate>(
         contactNumber: { type: String, required: true },
         districtId: { type: String, required: true },
         upazilaId: { type: String, required: true },
+        driveFileId: { type: String, required: true },
     },
     {
         timestamps: true,
