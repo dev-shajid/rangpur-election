@@ -21,6 +21,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useCallback, useEffect, useMemo } from "react"
+import PDFDialog from "@/components/PDFDialog"
 
 export default function CandidatesPage() {
     const { name, upazilaId } = useParams()
@@ -149,15 +150,9 @@ export default function CandidatesPage() {
         },
         {
             key: "more" as keyof Candidate,
-            header: "View More",
+            header: "Details",
             accessor: (row: Candidate) => (
-                <Button
-                    size="sm"
-                    onClick={() => window.open(`https://drive.google.com/file/d/${row.driveFileId}`, "_blank")}
-                    variant="outline"
-                >
-                    View
-                </Button>
+                <PDFDialog driveFileId={row.driveFileId} />
             ),
             width: "50px",
         },
