@@ -22,6 +22,9 @@ const formSchema = z.object({
     address: z.string().min(3, {
         message: "Address must be at least 3 characters.",
     }),
+    constituency: z.string().min(3, {
+        message: "Constituency must be at least 3 characters.",
+    }),
     contactNumber: z.string().min(10, {
         message: "Contact number must be at least 10 characters.",
     }),
@@ -48,6 +51,7 @@ export function CandidateDialog({ open, onOpenChange, candidate, districtId, upa
             name: candidate?.name || "",
             party: candidate?.party || "",
             address: candidate?.address || "",
+            constituency: candidate?.constituency || "",
             contactNumber: candidate?.contactNumber || "",
             driveFileId: candidate?.driveFileId || "",
         },
@@ -60,6 +64,7 @@ export function CandidateDialog({ open, onOpenChange, candidate, districtId, upa
                 name: candidate?.name || "",
                 party: candidate?.party || "",
                 address: candidate?.address || "",
+                constituency: candidate?.constituency || "",
                 contactNumber: candidate?.contactNumber || "",
                 driveFileId: candidate?.driveFileId || "",
             })
@@ -129,6 +134,19 @@ export function CandidateDialog({ open, onOpenChange, candidate, districtId, upa
                                     <FormLabel>Address</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter address" disabled={isPending} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="constituency"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Constituency</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter constituency" disabled={isPending} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

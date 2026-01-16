@@ -6,6 +6,7 @@ const candidateSchema = new Schema<Candidate>(
     {
         name: { type: String, required: true },
         address: { type: String, required: true },
+        constituency: { type: String, required: true },
         party: { type: String, required: true },
         contactNumber: { type: String, required: true },
         districtId: { type: String, required: true },

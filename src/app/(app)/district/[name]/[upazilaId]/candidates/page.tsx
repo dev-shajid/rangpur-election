@@ -72,7 +72,8 @@ export default function CandidatesPage() {
         return candidates.filter(c =>
             c.name.toLowerCase().includes(lowerQ) ||
             c.party.toLowerCase().includes(lowerQ) ||
-            c.address.toLowerCase().includes(lowerQ)
+            c.address.toLowerCase().includes(lowerQ) ||
+            c.constituency.toLowerCase().includes(lowerQ)
         )
     }, [candidates, searchQuery])
 
@@ -133,6 +134,17 @@ export default function CandidatesPage() {
                 <div className="flex items-center gap-2 text-muted-foreground">
                     <MapPin className="h-3.5 w-3.5" />
                     <span>{row.address}</span>
+                </div>
+            ),
+            sortable: true,
+        },
+        {
+            key: "constituency",
+            header: "Constituency",
+            accessor: (row) => (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin className="h-3.5 w-3.5" />
+                    <span>{row.constituency}</span>
                 </div>
             ),
             sortable: true,

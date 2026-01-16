@@ -5,6 +5,7 @@ export interface Candidate {
   _id?: string;
   name: string;
   address: string;
+  constituency: string;
   party: string;
   contactNumber: string;
   districtId: string;
