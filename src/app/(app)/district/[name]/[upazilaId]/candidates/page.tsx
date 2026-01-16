@@ -136,18 +136,15 @@ export default function CandidatesPage() {
                     <span>{row.address}</span>
                 </div>
             ),
-            sortable: true,
         },
         {
             key: "constituency",
             header: "Constituency",
             accessor: (row) => (
-                <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="h-3.5 w-3.5" />
-                    <span>{row.constituency}</span>
+                <div className="flex items-center gap-2">
+                  {row.constituency}
                 </div>
             ),
-            sortable: true,
         },
         {
             key: "contactNumber",
