@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./auth";
 import { authRoutes, DEFAUTL_AUTH_REDIRECT, superAdminRoutes } from "./routes";
+import { isSuperAdmin } from "./services/session.service";
 
 /**
  * Authentication middleware for Next.js 15
@@ -12,7 +13,7 @@ export async function proxy(request: NextRequest) {
   const isPrivateRoute = superAdminRoutes.includes(pathname);
   const isAuthRoute = authRoutes.includes(pathname);
   const session = await auth();
-  const isSuperAdmin = session?.user?.role === "superadmin";
+  const superAdmin = await isSuperAdmin();
 
   const isAuthenticated = !!session;
 
@@ -23,7 +24,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (!isSuperAdmin && isPrivateRoute) {
+  if (!superAdmin && isPrivateRoute) {
     return NextResponse.redirect(new URL(DEFAUTL_AUTH_REDIRECT, request.url));
   }
 

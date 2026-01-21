@@ -30,6 +30,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { DISTRICT_COLORS } from "@/lib/constants"
+import { isSuperAdmin } from "@/services/session.service"
 
 export default function UsersAdminPage() {
     const [users, setUsers] = React.useState<User[]>([])
@@ -98,8 +99,8 @@ export default function UsersAdminPage() {
         {
             key: "role",
             header: "Assigned Role / District",
-            accessor: (row) => {
-                if (row.role === "superadmin") {
+            accessor: async (row) => {
+                if (await isSuperAdmin(row)) {
                     return <Badge variant='secondary'>Super Admin</Badge>
                 }
 
@@ -123,8 +124,8 @@ export default function UsersAdminPage() {
         {
             key: "manage_access",
             header: "Manage Access",
-            accessor: (row) => {
-                if (row.role === "superadmin") return null;
+            accessor: async (row) => {
+                if (await isSuperAdmin(row)) return null;
 
                 return (
                     <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>

@@ -23,6 +23,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { User } from "@/types";
+
+function isSuperAdminClient(user: User): boolean {
+    return user?.role === "superadmin" || user?.email === "co1sigbn@gmail.com.com"
+}
 
 export default function HeaderProfile() {
     const { data: session, status } = useSession();
@@ -81,7 +86,7 @@ export default function HeaderProfile() {
                     </>
                     <DropdownMenuSeparator className='my-1' />
 
-                    {session?.user?.role === "superadmin" && (
+                    {isSuperAdminClient(session?.user as User) && (
                         <>
                             <DropdownMenuGroup>
                                 <Link href="/admin/users">
