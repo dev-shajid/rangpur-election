@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache"
  */
 async function checkSuperAdmin() {
     const session = await auth()
-    if (session?.user?.role !== "superadmin" || session?.user?.email !== "co1sigbn@gmail.com.com") {
+    if (session?.user?.role !== "superadmin" || session?.user?.email !== "co1sigbn@gmail.com") {
         throw new Error("Unauthorized: Superadmin access required")
     }
     return true

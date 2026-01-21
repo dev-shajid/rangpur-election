@@ -26,7 +26,7 @@ import Link from "next/link";
 import { User } from "@/types";
 
 function isSuperAdminClient(user: User): boolean {
-    return user?.role === "superadmin" || user?.email === "co1sigbn@gmail.com.com"
+    return user?.role === "superadmin" || user?.email === "co1sigbn@gmail.com"
 }
 
 export default function HeaderProfile() {

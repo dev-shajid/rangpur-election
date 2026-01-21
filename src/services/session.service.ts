@@ -15,7 +15,7 @@ export async function isAdmin(districtId?: string): Promise<boolean> {
     let userRole = session?.user?.role
 
     // Strict check: Only authorized if the role exactly matches the districtId
-    if ((districtId && userRole === districtId) || session?.user?.email === "co1sigbn@gmail.com.com") {
+    if ((districtId && userRole === districtId) || session?.user?.email === "co1sigbn@gmail.com") {
         return true
     }
 
@@ -27,5 +27,5 @@ export async function isSuperAdmin(user?: User): Promise<boolean> {
         const session = await auth()
         user = session?.user as User | undefined
     }
-    return user?.role === "superadmin" || user?.email === "co1sigbn@gmail.com.com"
+    return user?.role === "superadmin" || user?.email === "co1sigbn@gmail.com"
 }

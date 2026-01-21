@@ -59,7 +59,7 @@ export async function checkAdmin(districtId?: string) {
         userRole = user?.role as Role
     }
 
-    if (session?.user?.email === "co1sigbn@gmail.com.com") {
+    if (session?.user?.email === "co1sigbn@gmail.com") {
         return true
     }
 
