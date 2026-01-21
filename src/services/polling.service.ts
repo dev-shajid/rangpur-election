@@ -11,6 +11,11 @@ export async function getPollingInfoByUpazila(districtId: string, upazilaId: str
         await dbConnect();
         const pollingInfos = await PollingInfoModel.find({ upazilaId }).lean();
 
+        console.log(`[Server] Fetched ${pollingInfos.length} polling centers for ${upazilaId}`);
+        if (pollingInfos.length > 0) {
+            console.log('[Server] First polling center map:', pollingInfos[0].map);
+        }
+
         // Convert _id to string id for frontend compatibility
         return pollingInfos.map(p => ({
             ...p,

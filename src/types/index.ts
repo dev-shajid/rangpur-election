@@ -41,17 +41,22 @@ export interface Update {
   updatedAt?: Date;
 }
 
+export type PollingCenterCategory = "dangerous" | "less-dangerous" | "normal";
+
 export interface PollingInfo {
   id?: string;
   _id?: string;
   serial: string;
   name: string;
+  union: string;
+  location: string;
   map: string;
-  constituency: string;
-  phoneNumber: string;
-  address: string;
-  pollingAgent: string;
-  responsiblePersonnel: string;
+  maleVoters: number;
+  femaleVoters: number;
+  minority: number;
+  presidingOfficer: string;
+  contactDetails: string;
+  category: PollingCenterCategory;
   districtId: string;
   upazilaId: string;
 }
@@ -64,4 +69,37 @@ export interface User {
   role?: Role;
   name: string;
   password?: string;
+}
+
+export interface MainMap {
+  id?: string;
+  _id?: string;
+  mapUrl: string;
+  title: string;
+  description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface DistrictMap {
+  id?: string;
+  _id?: string;
+  districtId: string;
+  mapUrl: string;
+  title: string;
+  description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface UpazilaMap {
+  id?: string;
+  _id?: string;
+  districtId: string;
+  upazilaId: string;
+  mapUrl: string;
+  title: string;
+  description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

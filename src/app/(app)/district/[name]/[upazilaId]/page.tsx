@@ -7,6 +7,9 @@ import SectionCard from '@/components/SectionCard';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { CriticalUpdatesBannerSkeleton } from '@/components/loading/CriticalUpdatesBannerSkeleton';
+import { getUpazilaMap } from '@/services/district-map.service';
+import { UpazilaMapSection } from '@/components/UpazilaMapSection';
+import { auth } from '@/auth';
 
 export default async function UpazilaDashboard({ params }: { params: Promise<{ name: string, upazilaId: string }> }) {
     const { name, upazilaId } = await params;
@@ -18,6 +21,10 @@ export default async function UpazilaDashboard({ params }: { params: Promise<{ n
     if (!upazila) {
         notFound();
     }
+
+    const session = await auth();
+    const mapData = await getUpazilaMap(districtId, upazilaIdDecoded);
+    const isAdmin = session?.user?.role === 'superadmin' || session?.user?.role === districtId;
 
     return (
         <>
@@ -41,6 +48,15 @@ export default async function UpazilaDashboard({ params }: { params: Promise<{ n
                     </div>
                 </div>
             </section>
+
+            {/* Upazila Map Section */}
+            <UpazilaMapSection
+                mapData={mapData}
+                districtId={districtId}
+                upazilaId={upazilaIdDecoded}
+                upazilaName={upazila.nameBn}
+                isAdmin={isAdmin}
+            />
 
             {/* Section Cards */}
             <section className="container mx-auto px-4 py-12">

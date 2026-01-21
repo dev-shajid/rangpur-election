@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import { DISTRICT_COLORS } from '@/lib/constants';
 import { auth } from '@/auth';
 import { cn } from '@/lib/utils';
+import { getDistrictMap } from '@/services/district-map.service';
+import { DistrictMapSection } from '@/components/DistrictMapSection';
 
 export default async function DistrictDashboard({ params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
@@ -17,6 +19,9 @@ export default async function DistrictDashboard({ params }: { params: Promise<{ 
   if (!district) {
     notFound();
   }
+
+  const mapData = await getDistrictMap(districtName);
+  const isAdmin = session?.user?.role === 'superadmin' || session?.user?.role === districtName;
 
   return (
     <>
@@ -41,6 +46,14 @@ export default async function DistrictDashboard({ params }: { params: Promise<{ 
           </div>
         </div>
       </section>
+
+      {/* District Map Section */}
+      <DistrictMapSection
+        mapData={mapData}
+        districtId={districtName}
+        districtName={district.name}
+        isAdmin={isAdmin}
+      />
 
       {/* Section Cards */}
       <section className="container mx-auto px-4 py-12">

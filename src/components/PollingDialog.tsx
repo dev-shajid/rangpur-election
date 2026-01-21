@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PollingInfo } from "@/types"
 import { toast } from "sonner"
 import { createPollingInfo, updatePollingInfo } from "@/services/polling.service"
@@ -19,23 +20,32 @@ const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
     }),
+    union: z.string().min(2, {
+        message: "Union is required.",
+    }),
+    location: z.string().min(3, {
+        message: "Location is required.",
+    }),
     map: z.string().min(3, {
         message: "Map must be a valid map link.",
     }),
-    constituency: z.string().min(2, {
-        message: "Constituency must be at least 2 characters.",
+    maleVoters: z.number().min(0, {
+        message: "Male voters must be 0 or greater.",
     }),
-    phoneNumber: z.string().min(10, {
-        message: "Phone number must be at least 10 characters.",
+    femaleVoters: z.number().min(0, {
+        message: "Female voters must be 0 or greater.",
     }),
-    address: z.string().min(3, {
-        message: "Address must be at least 3 characters.",
+    minority: z.number().min(0, {
+        message: "Minority voters must be 0 or greater.",
     }),
-    pollingAgent: z.string().min(3, {
-        message: "Polling agent must be at least 3 characters.",
+    presidingOfficer: z.string().min(3, {
+        message: "Presiding officer name is required.",
     }),
-    responsiblePersonnel: z.string().min(3, {
-        message: "Responsible personnel must be at least 3 characters.",
+    contactDetails: z.string().min(10, {
+        message: "Contact details must be at least 10 characters.",
+    }),
+    category: z.enum(["dangerous", "less-dangerous", "normal"], {
+        message: "Please select a category.",
     }),
 })
 
@@ -56,12 +66,15 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
         defaultValues: {
             serial: pollingInfo?.serial || "",
             name: pollingInfo?.name || "",
+            union: pollingInfo?.union || "",
+            location: pollingInfo?.location || "",
             map: pollingInfo?.map || "",
-            constituency: pollingInfo?.constituency || "",
-            phoneNumber: pollingInfo?.phoneNumber || "",
-            address: pollingInfo?.address || "",
-            pollingAgent: pollingInfo?.pollingAgent || "",
-            responsiblePersonnel: pollingInfo?.responsiblePersonnel || "",
+            maleVoters: pollingInfo?.maleVoters || 0,
+            femaleVoters: pollingInfo?.femaleVoters || 0,
+            minority: pollingInfo?.minority || 0,
+            presidingOfficer: pollingInfo?.presidingOfficer || "",
+            contactDetails: pollingInfo?.contactDetails || "",
+            category: pollingInfo?.category || "normal",
         },
     })
 
@@ -71,10 +84,15 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
             form.reset({
                 serial: pollingInfo?.serial || "",
                 name: pollingInfo?.name || "",
+                union: pollingInfo?.union || "",
+                location: pollingInfo?.location || "",
                 map: pollingInfo?.map || "",
-                constituency: pollingInfo?.constituency || "",
-                phoneNumber: pollingInfo?.phoneNumber || "",
-                address: pollingInfo?.address || "",
+                maleVoters: pollingInfo?.maleVoters || 0,
+                femaleVoters: pollingInfo?.femaleVoters || 0,
+                minority: pollingInfo?.minority || 0,
+                presidingOfficer: pollingInfo?.presidingOfficer || "",
+                contactDetails: pollingInfo?.contactDetails || "",
+                category: pollingInfo?.category || "normal",
             })
         }
     }, [pollingInfo, open, form])
@@ -107,111 +125,191 @@ export function PollingDialog({ open, onOpenChange, pollingInfo, districtId, upa
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="serial"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Serial</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter serial number" disabled={isPending} {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Name</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter polling center name" disabled={isPending} {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="constituency"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Constituency</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter constituency" disabled={isPending} {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="phoneNumber"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Phone Number</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter phone number" disabled={isPending} {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="address"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Address</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter address" disabled={isPending} {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-h-[60vh] overflow-y-auto px-1">
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="serial"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Serial</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g., 001" disabled={isPending} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Name Of Polling Center</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter polling center name" disabled={isPending} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="union"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Union</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter union name" disabled={isPending} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="location"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Location</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter location" disabled={isPending} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
                         <FormField
                             control={form.control}
                             name="map"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Map</FormLabel>
+                                    <FormLabel>Map URL</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter map link" disabled={isPending} {...field} />
+                                        <Input placeholder="Enter Google Maps embed URL" disabled={isPending} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
+                        <div className="grid grid-cols-3 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="maleVoters"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Male Voters</FormLabel>
+                                        <FormControl>
+                                            <Input 
+                                                type="number" 
+                                                placeholder="0" 
+                                                disabled={isPending} 
+                                                {...field}
+                                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="femaleVoters"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Female Voters</FormLabel>
+                                        <FormControl>
+                                            <Input 
+                                                type="number" 
+                                                placeholder="0" 
+                                                disabled={isPending} 
+                                                {...field}
+                                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="minority"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Minority</FormLabel>
+                                        <FormControl>
+                                            <Input 
+                                                type="number" 
+                                                placeholder="0" 
+                                                disabled={isPending} 
+                                                {...field}
+                                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="presidingOfficer"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Presiding Officer</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter officer name" disabled={isPending} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="contactDetails"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Contact Details</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter phone number" disabled={isPending} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
                         <FormField
                             control={form.control}
-                            name="pollingAgent"
+                            name="category"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Polling Agent</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter polling agent" disabled={isPending} {...field} />
-                                    </FormControl>
+                                    <FormLabel>Category Of Polling Center</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select category" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="normal">Normal</SelectItem>
+                                            <SelectItem value="less-dangerous">Less Dangerous</SelectItem>
+                                            <SelectItem value="dangerous">Dangerous</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name="responsiblePersonnel"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Responsible Personnel</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter responsible personnel" disabled={isPending} {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+
                         <DialogFooter>
                             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
                                 Cancel

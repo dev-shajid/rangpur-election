@@ -1,8 +1,17 @@
 import DistrictCard from "@/components/DistrictCard";
 import { districts } from "@/lib/districts";
 import { Vote, Shield, Users, ClipboardList } from "lucide-react";
+import { getMainMap } from "@/services/map.service";
+import { auth } from "@/auth";
+import { MainMapSection } from "@/components/MainMapSection";
 
-const Index = () => {
+const Index = async () => {
+  const [mapData, session] = await Promise.all([
+    getMainMap(),
+    auth()
+  ]);
+  const isSuperAdmin = session?.user?.role === "superadmin";
+
   return (
     <>
       {/* Hero Section */}
@@ -37,6 +46,12 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      {/* Main Map Section */}
+      <MainMapSection 
+        mapData={mapData} 
+        isSuperAdmin={isSuperAdmin}
+      />
 
       {/* Info Cards */}
       <section className="container mx-auto px-4 pb-16">
